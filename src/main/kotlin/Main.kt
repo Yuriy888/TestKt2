@@ -1,6 +1,9 @@
 package com.ds
 
+
 import java.util.Scanner
+import kotlin.time.Duration
+import kotlin.time.measureTime
 
 fun main() {
     // Створення об'єкта для введення даних з консолі
@@ -9,6 +12,7 @@ fun main() {
     // Вводимо розмірність масиву
     println("Введіть розмірність масиву: ")
     val n = scanner.nextInt()
+    var timeToRun : Duration = Duration.ZERO
 
     // Створення масиву double з введеного розміру
     val array = DoubleArray(n)
@@ -19,7 +23,7 @@ fun main() {
         array[i] = scanner.nextDouble()
     }
     while (!exitTo) {
-        println("Оберіть метод сортування:")
+        println("\n Оберіть метод сортування:")
         println("1 - Бульбашка")
         println("2 - Швидке сортування")
         println("3 - Гончарка (Heap Sort)")
@@ -31,7 +35,7 @@ fun main() {
 
         when (choice) {
             1 -> bubbleSort(array)
-            4 -> bubbleSort2(array)
+            4 ->  timeToRun = bubbleSort2(array)
             2 -> quickSort(array, 0, n - 1)
             3 -> heapSort(array)
             6 -> insertSort(array)
@@ -42,6 +46,7 @@ fun main() {
         }
 
         // Виведення відсортованого масиву
+        println("час на сотування ${timeToRun.inWholeMicroseconds} mc")
         println("Відсортований масив:")
         for (element in array) {
             print("$element ")
@@ -84,18 +89,22 @@ fun insertSort(array: DoubleArray) {
 
     }
 }
-fun bubbleSort2(array: DoubleArray) {
-    val n = array.size
-    for (i in 0 until n - 1) {
-        for (j in i+1 until n) {
-            if (array[i] > array[j]) {
-                val temp = array[i]
-                array[i] = array[j]
-                array[j] = temp
+fun bubbleSort2(array: DoubleArray) : kotlin.time.Duration {
+    val time: kotlin.time.Duration = measureTime {
+        val n = array.size
+        for (i in 0 until n - 1) {
+            for (j in i + 1 until n) {
+                if (array[i] > array[j]) {
+                    val temp = array[i]
+                    array[i] = array[j]
+                    array[j] = temp
+                }
             }
         }
     }
+    return time
 }
+
 
 // Функція для сортування масива методом швидкого сортування
 fun quickSort(array: DoubleArray, low: Int, high: Int) {
